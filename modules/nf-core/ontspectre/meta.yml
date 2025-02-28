@@ -1,0 +1,135 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "ontspectre"
+description: A long-read copy number variation (CNV) caller designed to detect large
+  CNVs (>100kb)
+keywords:
+  - CNV
+  - long read
+  - genomics
+  - nanopore
+tools:
+  - "ontspectre":
+      description: "A long-read copy number variation (CNV) caller designed to detect
+        large CNVs (>100kb)"
+      homepage: "https://github.com/nanoporetech/ont-spectre"
+      documentation: "https://github.com/nanoporetech/ont-spectre"
+      tool_dev_url: "https://github.com/nanoporetech/ont-spectre"
+      licence: ["MIT", "Oxford Nanopore Technologies Public License"]
+      identifier: ""
+
+input:
+  # Only when we have meta
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1', single_end:false ]`
+    - summary:
+        type: file
+        description: Summary file from mosdepth
+    - regions_bed:
+        type: file
+        description: Regions BED file from mosdepth
+    - vcf:
+        type: file
+        description: VCF of SNV calls
+    - tbi:
+        type: file
+        description: Index of SNV calls
+  - - meta2:
+        type: map
+        description: Groovy Map containing reference information
+    - fasta:
+        type: file
+        description: Reference FASTA file
+  - - meta3:
+        type: map
+        description: Groovy Map containing reference information
+    - fai:
+        type: file
+        description: Index of reference FASTA
+  - - meta4:
+        type: map
+        description: Groovy Map containing metadata information
+    - metadata:
+        type: file
+        description: |
+          Genome metadata for Spectre.
+          Optional, can be replaced by passing a label as the `--metadata` parameter in your configuration.
+  - - meta5:
+        type: map
+        description: Groovy map containing blacklist information
+    - blacklist:
+        type: file
+        description: |
+          Blacklist BED file.
+          Optional, can be replaced by passing a label as the `--blacklist` parameter in your configuration.
+  - - bin_size:
+        type: integer
+        description: |
+          Bin size for copy number estimation.
+          Must be the same as mosdepth's bin size.
+output:
+  - bed:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/*.bed:
+          type: file
+          description: CNV calls in BED format
+  - vcf:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/*.vcf.gz:
+          type: file
+          description: CNV calls in VCF
+  - tbi:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/*.tbi:
+          type: file
+          description: VCF index
+  - spc:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/*.spc.gz:
+          type: file
+          description: CNV calls in SPC format
+  - windows_stats:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/windows_stats/*.csv:
+          type: file
+          description: Mosdepth window statistics in CSV format
+  - karyotype:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - out/predicted_karyotype.txt:
+          type: file
+          description: Sample's predicted karyotype
+  - versions:
+      - versions.yml:
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
+authors:
+  - "@Schmytzi"
+maintainers:
+  - "@Schmytzi"
