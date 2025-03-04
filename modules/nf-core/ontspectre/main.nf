@@ -58,9 +58,13 @@ process ONTSPECTRE {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    mkdir out
+    cd out
     mkdir windows_stats
-    touch ${prefix}.bed ${prefix}.vcf.gz ${prefix}.vcf.gz.tbi ${prefix}.spc.gz predicted_karyotype.txt
-
+    touch ${prefix}.bed ${prefix}.vcf.gz.tbi predicted_karyotype.txt windows_stats/${prefix}.csv
+    echo "" | gzip > ${prefix}.vcf.gz
+    echo "" | gzip > ${prefix}.spc.gz
+    cd ..
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
