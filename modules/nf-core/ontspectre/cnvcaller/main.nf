@@ -1,4 +1,4 @@
-process ONTSPECTRE {
+process ONTSPECTRE_CNVCALLER {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,7 +8,7 @@ process ONTSPECTRE {
         'community.wave.seqera.io/library/ont-spectre:0.3.2--adfae189059be3d9' }"
 
     input:
-    tuple val(meta), path(summary), path(regions_bed), path(vcf), path(tbi)
+    tuple val(meta), path(summary), path(regions_bed), path(regions_csi), path(vcf), path(tbi)
     tuple val(meta2), path(fasta)
     tuple val(meta3), path(fai)
     tuple val(meta4), path(metadata)  // reference metadata, optional
