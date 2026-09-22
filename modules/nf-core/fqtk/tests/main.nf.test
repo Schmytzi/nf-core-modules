@@ -32,13 +32,11 @@ nextflow_process {
                 ])
                 .join(UNTAR.out.untar)
                 .map { meta, sample_sheet, fastq_folder ->
-                    def paired = [
-                        ["out_L001_I1_001.fastq.gz", "8B"],
-                        ["out_L001_I2_001.fastq.gz", "8B"],
-                        ["out_L001_R1_001.fastq.gz", "150T"],
-                        ["out_L001_R2_001.fastq.gz", "150T"]
-                    ]
-                    [meta, sample_sheet, fastq_folder, paired]
+                    def files  = fastq_folder.listFiles() as List<Path>
+                    def structures = files.collect { file ->
+                        file.name =~ /_I\\d_/ ? '8B' : '150T'
+                    }
+                    [meta, sample_sheet, files, structures]
                 }
                 input[0] = ch_input
                 """
